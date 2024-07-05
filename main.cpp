@@ -3,6 +3,9 @@
 #include <string>
 #include "libs\board.h"
 
+using std::string;
+using std::vector;
+using std::cout;
 
 
 int main(){
@@ -24,8 +27,14 @@ int main(){
         std::cout<<chess.piece_array[i]<<'\n';
     }
     */
-
+    chess.SetBoard();
     chess.DisplayBoard();
+    vector<string> moves = getBishopMoves("h1");
+    //cout<<moves.size();
+    for(int i = 0; i < moves.size(); i++){
+        std::cout<<moves[i]<<' ';
+    }
+
 
     return 0;
 }
