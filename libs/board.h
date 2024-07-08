@@ -11,24 +11,35 @@
 
 class Board{
     public : 
-    std::vector<std::string> piece_array = {}; //each element will be piece/color/coordinate
-    std::vector<std::vector<char>> board_array = {{'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'},
-    {'_','_','_','_','_','_','_','_'}};
+    std::vector<Piece*> piece_array = {};
+    std::vector<std::vector<int>> board_array = {
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0}
+    };
+    bool white_long_castle = true;  //castling checks
+    bool white_short_castle = true;
+    bool black_long_castle = true;
+    bool black_short_castle = true;
+    
 
     std::vector<string> board_history = {}; // The correct algebraic notations are used here. Contains the full history of the board (can be modified);
     
-    void Initialize(); //set up the default board;
+    void Initialize(); //set up the default starting board;
     void InitializeFEN(std::string FEN);
     void UpdateBoard();
     void DisplayBoard();
+    void PlaceNewPiece(char name, std::string square);
     std::string GetFEN();
+    vector<Piece*> getKings();
+    bool check_castling_rights();
+    void MakeMove(string notation);   //use the algebric notation;
+    void unMakeMove(string notation);
 
-    
 };
 #endif

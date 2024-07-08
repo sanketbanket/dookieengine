@@ -16,10 +16,9 @@ int main(){
     
 
     //chess.DisplayBoard();
-    std::string FEN = "";
-    std::cout<<"Enter FEN : "<<'\n';
-    std::cin>>FEN;
-
+    std::string FEN = "rnbqkbnr/ppp1p1pp/8/5p2/3p4/4P3/PPPP1PPP/RNBQKBNR";
+    //std::cout<<"Enter FEN : "<<'\n';
+    //std::cin>>FEN;
 
     chess.InitializeFEN(FEN);
     /*
@@ -29,13 +28,11 @@ int main(){
     */
     chess.UpdateBoard();
     chess.DisplayBoard();
-    vector<string> moves = getKnightMoves("h2");
-    
-    //cout<<moves.size();
-    for(int i = 0; i < moves.size(); i++){
-        std::cout<<moves[i]<<' ';
+
+    Piece* obj = new Piece('P', "e3", 'e');
+    vector<string> move_list = getPawnMoves(obj->position, whichColor(obj->name), chess.board_array, obj -> origin);
+    for(string i : move_list){
+        cout<<i<<", ";
     }
-
-
     return 0;
 }

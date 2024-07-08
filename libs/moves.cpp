@@ -1,129 +1,353 @@
 #include "moves.h"
 
-using std::string;
-using std::vector;
 ////////////////important/////////////////
-//row = '8' - rank
-//column = file - 'a'
+// row = '8' - rank
+// column = file - 'a'
 
+char whichColor(char name)
+{
+    if (int(name - 'a' < 0))
+    {
+        return 'w';
+    }
+    return 'b';
+}
 
-vector<int> getYX(string square){
-    vector<int> XY = {'8' -  square[1], square[0] - 'a'};
+vector<int> getYX(string square)
+{
+    vector<int> XY = {'8' - square[1], square[0] - 'a'};
     return XY;
 }
-string getSquare(int row, int column){
+string getSquare(int row, int column)
+{
     string squ = "";
     squ.push_back(char(column + 'a'));
     squ.push_back(char('8' - row));
     return squ;
 }
-bool isValidSquare(int row, int column){
+bool isValidSquare(int row, int column)
+{
     return row >= 0 && row <= 7 && column >= 0 && column <= 7;
 }
-bool isValidSquare(string square){
+bool isValidSquare(string square)
+{
     int row = getYX(square)[0];
     int col = getYX(square)[1];
     return row >= 0 && row <= 7 && col >= 0 && col <= 7;
 }
 
-vector<string> getLegalMoves(char piece, string square){
-    vector<string> moves = {};
-    return moves;
-}
-vector<string> getRookMoves(string square){
+vector<string> getRookMoves(string square, char color, vector<vector<int>> board_array)
+{
     vector<string> validSquares = {};
-    char file = square[0];
-    char rank = square[1];
-    string rank_helper= "";
-    string file_helper = "";
-    
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
+    bool up = true;
+    bool down = true;
+    bool right = true;
+    bool left = true;
 
-    for(int i = 0; i < 8 ; i++ ) {
-        rank_helper.push_back(file);
-        rank_helper.push_back(char(8 - i + '0'));
-        
-        file_helper.push_back(char(i + 'a'));
-        file_helper.push_back(rank);
-        if(file_helper != square){
-            validSquares.push_back(file_helper);
+    for (int i = 1; i < 8; i++)
+    {
+        string target;
+        if (up && isValidSquare(row - i, col))
+        {
+            if (!board_array[row - i][col])
+            {
+                validSquares.push_back(getSquare(row - i, col));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row - i][col])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col));
+                    target.push_back(char('8' - (row - i)));
+                    validSquares.push_back(target);
+                    up = false;
+                }
+                else
+                {
+                    up = false;
+                }
+            }
+            target.clear();
         }
-        if(rank_helper != square){
-            validSquares.push_back(rank_helper);
-        };
-
-        file_helper.clear();
-        rank_helper.clear();
+        if (down && isValidSquare(row + i, col))
+        {
+            if (!board_array[row + i][col])
+            {
+                validSquares.push_back(getSquare(row + i, col));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row + i][col])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col));
+                    target.push_back(char('8' - (row + i)));
+                    validSquares.push_back(target);
+                    down = false;
+                }
+                else
+                {
+                    down = false;
+                }
+            }
+            target.clear();
+        }
+        if (right && isValidSquare(row, col + i))
+        {
+            if (!board_array[row][col + i])
+            {
+                validSquares.push_back(getSquare(row, col + i));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row][col + i])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col + i));
+                    target.push_back(char('8' - row));
+                    validSquares.push_back(target);
+                    right = false;
+                }
+                else
+                {
+                    right = false;
+                }
+            }
+            target.clear();
+        }
+        if (left && isValidSquare(row, col - i))
+        {
+            if (!board_array[row][col - i])
+            {
+                validSquares.push_back(getSquare(row, col - i));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row][col - i])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col - i));
+                    target.push_back(char('8' - row));
+                    validSquares.push_back(target);
+                    left = false;
+                }
+                else
+                {
+                    left = false;
+                }
+            }
+            target.clear();
+        }
     }
     return validSquares;
 }
 
-vector<string> getBishopMoves(string square){
-    char file = square[0];
-    char rank = square[0];
-    vector<int> yx = getYX(square);
+vector<string> getBishopMoves(string square, char color, vector<vector<int>> board_array)
+{
     vector<string> validSquares = {};
-    for(int i = 1; i <= 7; i++){
-        int row = yx[0] + i;
-        int col = yx[1] + i;
-        if(isValidSquare(row, col)){
-            validSquares.push_back(getSquare(row, col));
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
+    bool NW = true;
+    bool NE = true;
+    bool SW = true;
+    bool SE = true;
+    for (int i = 1; i < 8; i++)
+    {
+        string target;
+        if (NW && isValidSquare(row - i, col - i))
+        {
+            if (!board_array[row - i][col - i])
+            {
+                validSquares.push_back(getSquare(row - i, col - i));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row - i][col - i])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col - i));
+                    target.push_back(char('8' - (row - i)));
+                    validSquares.push_back(target);
+                    NW = false;
+                }
+                else
+                {
+                    NW = false;
+                }
+            }
+            target.clear();
         }
-        row = yx[0] - i;
-        col = yx[1] + i;
-        if(isValidSquare(row, col)){
-            
-            validSquares.push_back(getSquare(row, col));
+        if (NE && isValidSquare(row - i, col + i))
+        {
+            if (!board_array[row - i][col + i])
+            {
+                validSquares.push_back(getSquare(row - i, col + i));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row - i][col + i])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col + i));
+                    target.push_back(char('8' - (row - i)));
+                    validSquares.push_back(target);
+                    NE = false;
+                }
+                else
+                {
+                    NE = false;
+                }
+            }
+            target.clear();
         }
-        row = yx[0] + i;
-        col = yx[1] - i;
-        if(isValidSquare(row, col)){
-            validSquares.push_back(getSquare(row, col));
+        if (SW && isValidSquare(row + i, col - i))
+        {
+            if (!board_array[row + i][col - i])
+            {
+                validSquares.push_back(getSquare(row + i, col - i));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row + i][col - i])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col - i));
+                    target.push_back(char('8' - (row + i)));
+                    validSquares.push_back(target);
+                    SW = false;
+                }
+                else
+                {
+                    SW = false;
+                }
+            }
+            target.clear();
         }
-        row = yx[0] - i;
-        col = yx[1] - i;
-        if(isValidSquare(row, col)){
-            validSquares.push_back(getSquare(row, col));
+        if (SE && isValidSquare(row + i, col + i))
+        {
+            if (!board_array[row + i][col + i])
+            {
+                validSquares.push_back(getSquare(row + i, col + i));
+            }
+            else
+            {
+                if (whichColor(char(board_array[row + i][col + i])) != color)
+                {
+                    target = "x";
+                    target.push_back(char('a' + col + i));
+                    target.push_back(char('8' - (row + i)));
+                    validSquares.push_back(target);
+                    SE = false;
+                }
+                else
+                {
+                    SE = false;
+                }
+            }
+            target.clear();
         }
     }
     return validSquares;
 }
-vector<string> getQueenMoves(string square){
-    vector<string> diags = getBishopMoves(square);
-    vector<string> straights = getRookMoves(square);
-    for(int i = 0; i < straights.size(); i++){
+vector<string> getQueenMoves(string square, char color, vector<vector<int>> board_array)
+{
+    vector<string> diags = getBishopMoves(square, color, board_array);
+    vector<string> straights = getRookMoves(square, color, board_array);
+    for (int i = 0; i < straights.size(); i++)
+    {
         diags.push_back(straights[i]);
     }
     return diags;
 }
 
-vector<string> getKnightMoves(string square){
+vector<string> getKnightMoves(string square, char color, vector<vector<int>> board_array)
+{
     int row = getYX(square)[0];
     int col = getYX(square)[1];
-    vector<string> validSquares ={};
-    if(isValidSquare(row + 2, col + 1)){validSquares.push_back(getSquare(row + 2, col + 1));}
-    if(isValidSquare(row + 2, col - 1)){validSquares.push_back(getSquare(row + 2, col - 1));}
-
-    if(isValidSquare(row - 2, col + 1)){validSquares.push_back(getSquare(row - 2, col + 1));}
-    if(isValidSquare(row - 2, col - 1)){validSquares.push_back(getSquare(row - 2, col - 1));}
-
-    if(isValidSquare(row + 1, col - 2)){validSquares.push_back(getSquare(row + 1, col - 2));}
-    if(isValidSquare(row - 1, col - 2)){validSquares.push_back(getSquare(row - 1, col - 2));}
-
-    if(isValidSquare(row + 1, col + 2)){validSquares.push_back(getSquare(row + 1, col + 2));}
-    if(isValidSquare(row - 1, col + 2)){validSquares.push_back(getSquare(row - 1, col + 2));}
+    vector<string> validSquares = {};
+    for (int i = -1; i < 2; i = i + 2)
+    {
+        for (int j = -1; j < 2; j = j + 2)
+        {
+            if (isValidSquare(row + (2 * i), col + j))
+            {
+                if (board_array[row + (2 * i)][col + j] == 0)
+                {
+                    validSquares.push_back(getSquare(row + (2 * i), col + j));
+                }
+                else
+                {
+                    if (whichColor(char(board_array[row + (2 * i)][ col + j])) != color)
+                    {
+                        string target = "x";
+                        target.push_back(char('a' + col + j));
+                        target.push_back(char('8' - (row + 2*i)));
+                        validSquares.push_back(target);
+                    }
+                }
+            }
+            if (isValidSquare(row + i, col + 2*j))
+            {
+                if (board_array[row + i][col + 2*j] == 0)
+                {
+                    validSquares.push_back(getSquare(row + i, col + 2*j));
+                }
+                else
+                {
+                    if (whichColor(char(board_array[row + i][col + 2*j])) != color)
+                    {
+                        string target = "x";
+                        target.push_back(char('a' + col + 2*j));
+                        target.push_back(char('8' - (row + i)));
+                        validSquares.push_back(target);
+                    }
+                }
+            }
+        }
+    }
     return validSquares;
 }
-vector<string> getKingMoves(string square){
+vector<string> getKingMoves(string square, vector<vector<int>> board_array)
+{
     int row = getYX(square)[0];
     int col = getYX(square)[1];
-    vector<string> validSquares ={};
-    if(isValidSquare(row + 1, col)){validSquares.push_back(getSquare(row + 1, col));}
-    if(isValidSquare(row - 1, col)){validSquares.push_back(getSquare(row - 1, col));}
-    if(isValidSquare(row, col + 1)){validSquares.push_back(getSquare(row, col + 1));}
-    if(isValidSquare(row, col - 1)){validSquares.push_back(getSquare(row, col - 1));}
-    if(isValidSquare(row - 1, col + 1)){validSquares.push_back(getSquare(row - 1, col + 1));}
-    if(isValidSquare(row - 1, col - 1)){validSquares.push_back(getSquare(row - 1, col - 1));}
-    if(isValidSquare(row + 1, col - 1)){validSquares.push_back(getSquare(row + 1, col - 1));}
-    if(isValidSquare(row + 1, col + 1)){validSquares.push_back(getSquare(row + 1, col + 1));}
+    vector<string> validSquares = {};
+    for(int i = -1; i < 2; i++){
+        for(int j = -1 ;j < 2; j++){
+            continue;
+        }
+    }
     return validSquares;
+}
+
+vector<string> getPawnMoves(string square, char color, vector<vector<int>> board_array, char origin){
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
+    vector<string> validSquares = {};
+    bool at_origin = (square[0] == origin && square[1] == '2' && color == 'w') || (square[0] == origin && square[1] == '7' && color == 'b');
+    int dir = color == 'w'? -1 : 1;
+    if(isValidSquare(row + dir, col) && board_array[row + dir][col] == 0){
+        validSquares.push_back(getSquare(row + dir, col));
+        
+    }
+    if(isValidSquare(row + 2 * dir, col) && at_origin && board_array[row + 2 * dir][col] == 0){
+        validSquares.push_back(getSquare(row + 2*dir, col));
+    }
+    if(isValidSquare(row + dir, col + 1) && board_array[row + dir][col + 1] != 0){
+        string target = "x";
+        target.push_back(char(col + 1 + 'a'));
+        target.push_back(char('8' - (row + dir)));
+        validSquares.push_back(target);
+    }
+    if(isValidSquare(row + dir, col - 1) && board_array[row + dir][col - 1] != 0){
+        string target = "x";
+        target.push_back(char(col - 1 + 'a'));
+        target.push_back(char('8' - (row + dir)));
+        validSquares.push_back(target);
+    }
+    return validSquares;
+
 }

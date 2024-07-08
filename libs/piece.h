@@ -6,16 +6,23 @@
 using std::string;
 using std::vector;
 
-class piece{
+class Piece{
+    public:
     char name;
     char origin;    //file which it belonged to
-    string color;
     string position;
+    bool pinned = false;
     vector<string> history = {};
-    piece(char name, string color, string position, char origin);
+    vector<string> valid_moves ={};
 
-
+    Piece(char name, string position, char origin);
+    vector<string> getLegalMoves();
+    void Move();
+    void unMove();
+    bool amPinned();
 };
+
+
 
 
 #endif
