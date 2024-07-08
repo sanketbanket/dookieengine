@@ -6,7 +6,8 @@ using std::vector;
 //row = '8' - rank
 //column = file - 'a'
 
-vector<int> getXY(string square){
+
+vector<int> getYX(string square){
     vector<int> XY = {'8' -  square[1], square[0] - 'a'};
     return XY;
 }
@@ -15,6 +16,14 @@ string getSquare(int row, int column){
     squ.push_back(char(column + 'a'));
     squ.push_back(char('8' - row));
     return squ;
+}
+bool isValidSquare(int row, int column){
+    return row >= 0 && row <= 7 && column >= 0 && column <= 7;
+}
+bool isValidSquare(string square){
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
+    return row >= 0 && row <= 7 && col >= 0 && col <= 7;
 }
 
 vector<string> getLegalMoves(char piece, string square){
@@ -51,28 +60,28 @@ vector<string> getRookMoves(string square){
 vector<string> getBishopMoves(string square){
     char file = square[0];
     char rank = square[0];
-    vector<int> xy = getXY(square);
+    vector<int> yx = getYX(square);
     vector<string> validSquares = {};
     for(int i = 1; i <= 7; i++){
-        int row = xy[0] + i;
-        int col = xy[1] + i;
-        if(row >= 0 && row <= 7 && col >= 0 && col <= 7){
+        int row = yx[0] + i;
+        int col = yx[1] + i;
+        if(isValidSquare(row, col)){
             validSquares.push_back(getSquare(row, col));
         }
-        row = xy[0] - i;
-        col = xy[1] + i;
-        if(row >= 0 && row <= 7 && col >= 0 && col <= 7){
+        row = yx[0] - i;
+        col = yx[1] + i;
+        if(isValidSquare(row, col)){
             
             validSquares.push_back(getSquare(row, col));
         }
-        row = xy[0] + i;
-        col = xy[1] - i;
-        if(row >= 0 && row <= 7 && col >= 0 && col <= 7){
+        row = yx[0] + i;
+        col = yx[1] - i;
+        if(isValidSquare(row, col)){
             validSquares.push_back(getSquare(row, col));
         }
-        row = xy[0] - i;
-        col = xy[1] - i;
-        if(row >= 0 && row <= 7 && col >= 0 && col <= 7){
+        row = yx[0] - i;
+        col = yx[1] - i;
+        if(isValidSquare(row, col)){
             validSquares.push_back(getSquare(row, col));
         }
     }
@@ -88,7 +97,33 @@ vector<string> getQueenMoves(string square){
 }
 
 vector<string> getKnightMoves(string square){
-    vector<int> xy = getXY(square);
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
     vector<string> validSquares ={};
+    if(isValidSquare(row + 2, col + 1)){validSquares.push_back(getSquare(row + 2, col + 1));}
+    if(isValidSquare(row + 2, col - 1)){validSquares.push_back(getSquare(row + 2, col - 1));}
+
+    if(isValidSquare(row - 2, col + 1)){validSquares.push_back(getSquare(row - 2, col + 1));}
+    if(isValidSquare(row - 2, col - 1)){validSquares.push_back(getSquare(row - 2, col - 1));}
+
+    if(isValidSquare(row + 1, col - 2)){validSquares.push_back(getSquare(row + 1, col - 2));}
+    if(isValidSquare(row - 1, col - 2)){validSquares.push_back(getSquare(row - 1, col - 2));}
+
+    if(isValidSquare(row + 1, col + 2)){validSquares.push_back(getSquare(row + 1, col + 2));}
+    if(isValidSquare(row - 1, col + 2)){validSquares.push_back(getSquare(row - 1, col + 2));}
+    return validSquares;
+}
+vector<string> getKingMoves(string square){
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
+    vector<string> validSquares ={};
+    if(isValidSquare(row + 1, col)){validSquares.push_back(getSquare(row + 1, col));}
+    if(isValidSquare(row - 1, col)){validSquares.push_back(getSquare(row - 1, col));}
+    if(isValidSquare(row, col + 1)){validSquares.push_back(getSquare(row, col + 1));}
+    if(isValidSquare(row, col - 1)){validSquares.push_back(getSquare(row, col - 1));}
+    if(isValidSquare(row - 1, col + 1)){validSquares.push_back(getSquare(row - 1, col + 1));}
+    if(isValidSquare(row - 1, col - 1)){validSquares.push_back(getSquare(row - 1, col - 1));}
+    if(isValidSquare(row + 1, col - 1)){validSquares.push_back(getSquare(row + 1, col - 1));}
+    if(isValidSquare(row + 1, col + 1)){validSquares.push_back(getSquare(row + 1, col + 1));}
     return validSquares;
 }

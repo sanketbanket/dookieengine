@@ -1,5 +1,35 @@
 #include "board.h"
 
+static std::string WhichColor(char piece){
+    switch(piece){
+        case 'r' : 
+            return "black";
+        case 'n' : 
+            return "black";
+        case 'b' : 
+            return "black";
+        case 'q' : 
+            return "black";
+        case 'k' : 
+            return "black";
+        case 'p' : 
+            return "black";
+        case 'R' : 
+            return "white";
+        case 'N' : 
+            return "white";
+        case 'B' : 
+            return "white";
+        case 'Q' : 
+            return "white";
+        case 'K' : 
+            return "white";
+        case 'P' : 
+            return "white";
+    }
+    return "none";
+}
+
 void Board::Initialize(){
     piece_array.clear();
     std::string FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
@@ -77,11 +107,7 @@ void Board::DisplayBoard(){
     std::cout<<"a   b   c   d   e   f   g   h\n";
 }
 
-void Board::SetBoard(){
-    if(piece_array.empty()){
-        return;
-    }
-    using namespace std;
+void Board::UpdateBoard(){
     
     for(int i = 0; i < piece_array.size();i++){
         char rank = piece_array[i][5];

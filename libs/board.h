@@ -4,37 +4,10 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <map>
 #include "moves.h"
+#include "piece.h"
 
-static std::string WhichColor(char piece){
-    switch(piece){
-        case 'r' : 
-            return "black";
-        case 'n' : 
-            return "black";
-        case 'b' : 
-            return "black";
-        case 'q' : 
-            return "black";
-        case 'k' : 
-            return "black";
-        case 'p' : 
-            return "black";
-        case 'R' : 
-            return "white";
-        case 'N' : 
-            return "white";
-        case 'B' : 
-            return "white";
-        case 'Q' : 
-            return "white";
-        case 'K' : 
-            return "white";
-        case 'P' : 
-            return "white";
-    }
-    return "none";
-}
 
 class Board{
     public : 
@@ -48,14 +21,14 @@ class Board{
     {'_','_','_','_','_','_','_','_'},
     {'_','_','_','_','_','_','_','_'}};
 
+    std::vector<string> board_history = {}; // The correct algebraic notations are used here. Contains the full history of the board (can be modified);
+    
     void Initialize(); //set up the default board;
     void InitializeFEN(std::string FEN);
-    void SetBoard();
+    void UpdateBoard();
     void DisplayBoard();
+    std::string GetFEN();
 
-    //now getting all the valid moves for each piece; all outputs will be a vector of string coordinates (like {'e3','d2'}) ...
-    //...for a particular piece;
+    
 };
-
-
 #endif
