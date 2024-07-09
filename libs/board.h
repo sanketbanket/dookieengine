@@ -27,6 +27,8 @@ class Board{
     bool black_long_castle = true;
     bool black_short_castle = true;
     
+    vector<vector<int>> white_attack = board_array;  //these will keep track of whatever squares are attacked by the corresponding colors
+    vector<vector<int>> black_attack = board_array;
 
     std::vector<string> board_history = {}; // The correct algebraic notations are used here. Contains the full history of the board (can be modified);
     
@@ -41,5 +43,13 @@ class Board{
     void MakeMove(string notation);   //use the algebric notation;
     void unMakeMove(string notation);
 
+
 };
+
+std::vector<std::string> getKingMoves(Piece piece, Board board); //needs board because all sorts of check-ing;
+
+Piece* getPieceAtSquare(string square);
+
+
+
 #endif

@@ -310,18 +310,7 @@ vector<string> getKnightMoves(string square, char color, vector<vector<int>> boa
     }
     return validSquares;
 }
-vector<string> getKingMoves(string square, vector<vector<int>> board_array)
-{
-    int row = getYX(square)[0];
-    int col = getYX(square)[1];
-    vector<string> validSquares = {};
-    for(int i = -1; i < 2; i++){
-        for(int j = -1 ;j < 2; j++){
-            continue;
-        }
-    }
-    return validSquares;
-}
+
 
 vector<string> getPawnMoves(string square, char color, vector<vector<int>> board_array, char origin){
     int row = getYX(square)[0];
@@ -330,24 +319,36 @@ vector<string> getPawnMoves(string square, char color, vector<vector<int>> board
     bool at_origin = (square[0] == origin && square[1] == '2' && color == 'w') || (square[0] == origin && square[1] == '7' && color == 'b');
     int dir = color == 'w'? -1 : 1;
     if(isValidSquare(row + dir, col) && board_array[row + dir][col] == 0){
-        validSquares.push_back(getSquare(row + dir, col));
-        
+        validSquares.push_back(getSquare(row + dir, col));    
     }
     if(isValidSquare(row + 2 * dir, col) && at_origin && board_array[row + 2 * dir][col] == 0){
         validSquares.push_back(getSquare(row + 2*dir, col));
     }
-    if(isValidSquare(row + dir, col + 1) && board_array[row + dir][col + 1] != 0){
+    for(int i = -1 ; i < 2; i += 2){
+    // the following are the squares that the pawn attacks diagonally;
+    if(isValidSquare(row + dir, col + i) && board_array[row + dir][col + i] != 0){
         string target = "x";
-        target.push_back(char(col + 1 + 'a'));
+        target.push_back(char(col + i + 'a'));
         target.push_back(char('8' - (row + dir)));
         validSquares.push_back(target);
     }
-    if(isValidSquare(row + dir, col - 1) && board_array[row + dir][col - 1] != 0){
-        string target = "x";
-        target.push_back(char(col - 1 + 'a'));
-        target.push_back(char('8' - (row + dir)));
-        validSquares.push_back(target);
     }
     return validSquares;
-
 }
+
+vector<string> getPawnDiagonals(string square, char color){
+    vector<string> attackSquares;
+    int row = getYX(square)[0];
+    int col = getYX(square)[1];
+    int dir = color == 'w'? -1 : 1;
+    for(int i = -1 ; i < 2; i += 2){
+        if(isValidSquare(row + dir, col + i)){
+        string target;
+        target.push_back(char(col + i + 'a'));
+        target.push_back(char('8' - (row + dir)));
+        attackSquares.push_back(target);
+    }
+    }
+    return attackSquares;
+}
+

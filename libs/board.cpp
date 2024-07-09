@@ -4,10 +4,10 @@ void Board::Initialize(){
     piece_array.clear();
     std::string FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
     int current_rank = 8;
-    int current_file = 0; //acting as the index for files;
+    int current_file = 0; 
 
     for(int i = 0; i < FEN.length(); i++){
-        if(FEN[i] == '/'){
+        if(FEN[i] == '/'){    //moves down a rank if / is encountered
             current_rank--;
             current_file = 0;
         }
@@ -29,7 +29,8 @@ void Board::Initialize(){
 void Board::InitializeFEN(std::string FEN){
     piece_array.clear();
     int current_rank = 8;
-    int current_file = 0; //acting as the index for files;
+    int current_file = 0;
+
 
     for(int i = 0; i < FEN.length(); i++){
         if(FEN[i] == '/'){
@@ -71,7 +72,6 @@ void Board::DisplayBoard(){
 }
 
 void Board::UpdateBoard(){
-    
     for(Piece* x : piece_array){
         char rank = x-> position[1];
         char file = x-> position[0];
@@ -89,4 +89,26 @@ vector<Piece*> Board::getKings(){
         }
     }
     return kings;
+}
+
+std::vector<std::string> getKingMoves(Piece piece, Board board){
+    int row = piece.position[0] - 'a';
+    int col = '8'- piece.position[1] ;
+    vector<string> validSquares = {};
+    
+    for(int i  = -1 ; i < 2; i++){    // these loops are just to iterate around the king
+        for(int j = -1 ; j < 2; j++){
+            if(isValidSquare(row + i, col + i)){
+                if(whichColor(piece.name) == 'w' && board.black_attack[row + i][col + i]==0&& board.board_array[row+i][col+i] == 0){
+                    board.white_attack[row + i][col + i] = 1;
+                    validSquares.push_back(getSquare(row + i, col + i));
+                }
+                if(whichColor(piece.name) == 'b' && board.white_attack[row + i][col + i]==0&& board.board_array[row+i][col+i] == 0){
+                    board.black_attack[row + i][col + i] = 1;
+                    validSquares.push_back(getSquare(row + i, col + i));
+                }
+            }
+        }
+    }
+    return validSquares;
 }

@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #include "libs\board.h"
+#include "libs\movesearch.h"
 
 using std::string;
 using std::vector;
@@ -20,19 +21,15 @@ int main(){
     //std::cout<<"Enter FEN : "<<'\n';
     //std::cin>>FEN;
 
-    chess.InitializeFEN(FEN);
-    /*
-    for(int i = 0;i < chess.piece_array.size();i++){
-        std::cout<<chess.piece_array[i]<<'\n';
-    }
-    */
+    chess.Initialize();
     chess.UpdateBoard();
     chess.DisplayBoard();
 
-    Piece* obj = new Piece('P', "e3", 'e');
-    vector<string> move_list = getPawnMoves(obj->position, whichColor(obj->name), chess.board_array, obj -> origin);
-    for(string i : move_list){
-        cout<<i<<", ";
-    }
+    
+    
+    std::cout<<"move_count "<<get_number_of_moves(chess);
+    std::cout<<'\n';
+
+    
     return 0;
 }
